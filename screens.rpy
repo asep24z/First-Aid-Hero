@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 ## Inisialisasi
 ################################################################################
 
@@ -343,6 +343,8 @@ style navigation_button:
 
 style navigation_button_text:
     properties gui.text_properties("navigation_button")
+    outlines [ (absolute(2), "#000", absolute(1), absolute(1)) ] # Tambah bayangan hitam
+    hover_outlines [ (absolute(2), "#4FC3F7", absolute(1), absolute(1)) ] # Glow biru saat di-hover
 
 
 ## Layar Menu utama ############################################################
@@ -352,11 +354,11 @@ style navigation_button_text:
 ## https://www.renpy.org/doc/html/screen_special.html#main-menu
 
 screen main_menu():
-
-    ## Ini Memastikan Layar Menu Yang Lain Telah Di Timpa
     tag menu
 
-    add gui.main_menu_background
+    add gui.main_menu_background:
+        xsize 1920
+        ysize 1080
 
     ## Frame kosong ini menggelap di menu utama.
     frame:
@@ -366,16 +368,7 @@ screen main_menu():
     ## dari menu utama adalah layar navigasi.
     use navigation
 
-    if gui.show_name:
-
-        vbox:
-            style "main_menu_vbox"
-
-            text "[config.name!t]":
-                style "main_menu_title"
-
-            text "[config.version]":
-                style "main_menu_version"
+    # Game name and version removed to keep UI clean
 
 
 style main_menu_frame is empty
@@ -385,10 +378,10 @@ style main_menu_title is main_menu_text
 style main_menu_version is main_menu_text
 
 style main_menu_frame:
-    xsize 420
+    xsize 600
     yfill True
 
-    background "gui/overlay/main_menu.png"
+    background None # Menghilangkan kotak hitam agar gambar terlihat penuh
 
 style main_menu_vbox:
     xalign 1.0
@@ -406,16 +399,6 @@ style main_menu_title:
 style main_menu_version:
     properties gui.text_properties("version")
 
-
-## layar Menu Permainan ########################################################
-##
-## Ini menjalaskan struktur dasar yang paling sering di gunakan di layar menu
-## permainan, ini ditampilkan beserta layar judul, dan menampilkan latar
-## belakang,judul,dan navigasi.
-##
-## Parameter scroll dapat berisi 'None', atau "viewport" dan "vpgrid". Layar
-## ini di maksudkan untuk di gunakan dengan cabang satu atau lebih, yang di
-## tempatkan di dalamnya.
 
 screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 

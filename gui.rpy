@@ -1,4 +1,4 @@
-﻿################################################################################
+################################################################################
 ## Inisialisasi
 ################################################################################
 
@@ -26,17 +26,17 @@ define config.check_conflicting_properties = True
 ## Warna text pada antarmuka.
 
 ## Warna aksen yang digunakan sepanjang interface sampai pewarnaan text.
-define gui.accent_color = '#0066cc'
+define gui.accent_color = '#4FC3F7' # Biru cerah sesuai Lio
 
 ## Warna yang di gunakan untuk warna tombol text jika di pilih atau di tekan.
-define gui.idle_color = '#888888'
+define gui.idle_color = '#ffffff' # Putih agar kontras
 
 ## Warna kecil yang di gunakan untuk text kecil, yang membutuhkan lebih terang/
 ## lebih gelap untuk mencapai efek yang sama
 define gui.idle_small_color = '#aaaaaa'
 
 ## Warna yang di gunakan untuk tombol dan bar yang di pilih.
-define gui.hover_color = '#66a3e0'
+define gui.hover_color = '#FFE082' # Kuning emas saat di-hover
 
 ## Warna yang digunakan untuk text tombol ketika di pijit tapi tidak di fokus.
 ## Tombol di pilih jika terdapat di layar saat ini atau value preferensi.
@@ -82,6 +82,9 @@ define gui.label_text_size = 36
 ## Ukuran dari text di layar notifikasi.
 define gui.notify_text_size = 24
 
+## Apakah menunjukkan judul permainan di menu utama?
+define gui.show_name = False
+
 ## Ukuran judul permainan.
 define gui.title_text_size = 75
 
@@ -89,8 +92,8 @@ define gui.title_text_size = 75
 ## Menu utama dan Menu permainan. ##############################################
 
 ## Gambar yang di gunakan untuk Menu utama dan Menu permainan.
-define gui.main_menu_background = "gui/main_menu.png"
-define gui.game_menu_background = "gui/game_menu.png"
+define gui.main_menu_background = "gui/main_menu.jpg"
+define gui.game_menu_background = "gui/game_menu.jpg"
 
 
 ## Dialog ######################################################################
@@ -247,7 +250,7 @@ define gui.file_slot_rows = 2
 ## antarmuka pengguna.
 
 ## Posisi sisi kiri tombol navigasi, relatif terhadap sisi kiri layar.
-define gui.navigation_xpos = 60
+define gui.navigation_xpos = 1400 # Geser ke kanan agar tidak menutupi logo
 
 ## Posisi vertikal indikator lompatan.
 define gui.skip_ypos = 15
