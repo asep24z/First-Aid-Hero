@@ -1,13 +1,10 @@
-################################################################################
 ## Inisialisasi
-################################################################################
+
 
 init offset = -1
 
 
-################################################################################
 ## Gaya
-################################################################################
 
 style default:
     properties gui.text_properties()
@@ -290,48 +287,76 @@ style quick_button_text:
 
 screen navigation():
 
-    vbox:
-        style_prefix "navigation"
+    if renpy.get_screen("main_menu"):
+        vbox:
+            style_prefix "main_menu_navigation"
+            xpos gui.main_menu_navigation_xpos
+            xanchor 0.5
+            ypos gui.main_menu_navigation_ypos
+            spacing 10
 
-        xpos gui.navigation_xpos
-        yalign 0.5
+            imagebutton:
+                idle "gui/button_mulai.png"
+                hover Transform("gui/button_mulai_hover.png", size=(180, 55))
+                action Start()
+                xalign 0.5
 
-        spacing gui.navigation_spacing
+            imagebutton:
+                idle "gui/button_muat.png"
+                hover Transform("gui/button_muat_hover.png", size=(178, 55))
+                action ShowMenu("load")
+                xalign 0.5
 
-        if main_menu:
+            imagebutton:
+                idle "gui/button_setting.png"
+                hover Transform("gui/button_setting_hover.png", size=(177, 55))
+                action ShowMenu("preferences")
+                xalign 0.5
 
-            textbutton _("Mulai") action Start()
+            imagebutton:
+                idle "gui/button_tentang.png"
+                hover Transform("gui/button_tentang_hover.png", size=(179, 55))
+                action ShowMenu("about")
+                xalign 0.5
 
-        else:
+            if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+                imagebutton:
+                    idle "gui/button_bantuan.png"
+                    hover Transform("gui/button_bantuan_hover.png", size=(177, 55))
+                    action ShowMenu("help")
+                    xalign 0.5
+
+            if renpy.variant("pc"):
+                imagebutton:
+                    idle "gui/button_keluar.png"
+                    hover Transform("gui/button_keluar_hover.png", size=(180, 55))
+                    action Quit(confirm=False)
+                    xalign 0.5
+
+    elif not main_menu:
+        vbox:
+            style_prefix "navigation"
+            xpos gui.navigation_xpos
+            yalign 0.5
+            spacing gui.navigation_spacing
 
             textbutton _("Riwayat") action ShowMenu("history")
-
             textbutton _("Simpan") action ShowMenu("save")
+            textbutton _("Muat") action ShowMenu("load")
+            textbutton _("Setting") action ShowMenu("preferences")
 
-        textbutton _("Muat") action ShowMenu("load")
+            if _in_replay:
+                textbutton _("Akhiri Replay") action EndReplay(confirm=True)
+            else:
+                textbutton _("Menu Utama") action MainMenu()
 
-        textbutton _("Setting") action ShowMenu("preferences")
+            textbutton _("Tentang") action ShowMenu("about")
 
-        if _in_replay:
+            if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
+                textbutton _("Bantuan") action ShowMenu("help")
 
-            textbutton _("Akhiri Replay") action EndReplay(confirm=True)
-
-        elif not main_menu:
-
-            textbutton _("Menu Utama") action MainMenu()
-
-        textbutton _("Tentang") action ShowMenu("about")
-
-        if renpy.variant("pc") or (renpy.variant("web") and not renpy.variant("mobile")):
-
-            ## Bantuan tidak perlu atau relevan dengan perangkat mobile.
-            textbutton _("Bantuan") action ShowMenu("help")
-
-        if renpy.variant("pc"):
-
-            ## Tombol keluar dilarang di iOS dan tidak diperlukan di Android dan
-            ## Web.
-            textbutton _("Keluar") action Quit(confirm=not main_menu)
+            if renpy.variant("pc"):
+                textbutton _("Keluar") action Quit(confirm=True)
 
 
 style navigation_button is gui_button
@@ -345,6 +370,12 @@ style navigation_button_text:
     properties gui.text_properties("navigation_button")
     outlines [ (absolute(2), "#000", absolute(1), absolute(1)) ] # Tambah bayangan hitam
     hover_outlines [ (absolute(2), "#4FC3F7", absolute(1), absolute(1)) ] # Glow biru saat di-hover
+
+style main_menu_navigation_button is navigation_button:
+    xalign 0.5
+
+style main_menu_navigation_button_text is navigation_button_text:
+    xalign 0.5
 
 
 ## Layar Menu utama ############################################################

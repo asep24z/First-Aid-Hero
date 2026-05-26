@@ -252,6 +252,10 @@ define gui.file_slot_rows = 2
 ## Posisi sisi kiri tombol navigasi, relatif terhadap sisi kiri layar.
 define gui.navigation_xpos = 1400 # Geser ke kanan agar tidak menutupi logo
 
+## Posisi tombol navigasi menu utama, diletakkan di bawah logo sebelah kiri.
+define gui.main_menu_navigation_xpos = 960
+define gui.main_menu_navigation_ypos = 650
+
 ## Posisi vertikal indikator lompatan.
 define gui.skip_ypos = 15
 
