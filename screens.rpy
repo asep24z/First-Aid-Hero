@@ -238,20 +238,7 @@ screen quick_menu():
     ## Memastikan ini muncul di atas layar yang lain.
     zorder 100
 
-    if quick_menu:
-
-        hbox:
-            style_prefix "quick"
-            style "quick_menu"
-
-            textbutton _("Kembali") action Rollback()
-            textbutton _("Riwayat") action ShowMenu('history')
-            textbutton _("Lompati") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Otomatis") action Preference("auto-forward", "toggle")
-            textbutton _("Simpan") action ShowMenu('save')
-            textbutton _("Simpan.C") action QuickSave()
-            textbutton _("Muat.C") action QuickLoad()
-            textbutton _("Setting") action ShowMenu('preferences')
+    pass
 
 
 ## Kode ini memastikan layar quick_menu di tampilkan di dalam permainan,
@@ -431,7 +418,7 @@ style main_menu_version:
     properties gui.text_properties("version")
 
 
-screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
+screen game_menu(title, scroll=None, yinitial=0.0, spacing=0, show_navigation=True):
 
     style_prefix "game_menu"
 
@@ -442,15 +429,59 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 
     frame:
         style "game_menu_outer_frame"
+        xfill True
 
-        hbox:
+        if show_navigation:
+            hbox:
+                frame:
+                    style "game_menu_content_frame"
+                    xsize 1380
 
-            ## Memesan tempat untuk bagian navigasi.
-            frame:
-                style "game_menu_navigation_frame"
+                    if scroll == "viewport":
 
+                        viewport:
+                            yinitial yinitial
+                            scrollbars "vertical"
+                            mousewheel True
+                            draggable True
+                            pagekeys True
+
+                            side_yfill True
+
+                            vbox:
+                                spacing spacing
+                                transclude
+
+                    elif scroll == "vpgrid":
+
+                        vpgrid:
+                            cols 1
+                            yinitial yinitial
+
+                            scrollbars "vertical"
+                            mousewheel True
+                            draggable True
+                            pagekeys True
+
+                            side_yfill True
+
+                            spacing spacing
+
+                            transclude
+
+                    else:
+
+                        transclude
+
+                frame:
+                    style "game_menu_navigation_frame"
+        else:
             frame:
                 style "game_menu_content_frame"
+                xalign 0.5
+                xsize 1380
+                left_margin 0
+                right_margin 0
 
                 if scroll == "viewport":
 
@@ -465,6 +496,8 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 
                         vbox:
                             spacing spacing
+                            xalign 0.5
+                            xfill True
 
                             transclude
 
@@ -489,7 +522,8 @@ screen game_menu(title, scroll=None, yinitial=0.0, spacing=0):
 
                     transclude
 
-    use navigation
+    if show_navigation:
+        use navigation
 
     textbutton _("Kembali"):
         style "return_button"
@@ -568,20 +602,45 @@ screen about():
     ## Pernyataan 'use' ini mengikutsertakan layar game_menu ke dalam layar ini.
     ## Percabangan vbox lalu di ikutsertakan kedalam viewport di dalam layar
     ## game_menu.
-    use game_menu(_("Tentang"), scroll="viewport"):
+    use game_menu(_("Tentang Developer"), scroll="viewport", show_navigation=False):
 
         style_prefix "about"
 
         vbox:
+            xalign 0.5
+            yalign 0.5
+            spacing 20
+            xfill True
 
-            label "[config.name!t]"
-            text _("Versi [config.version!t]\n")
+            # Foto Developer
+            if renpy.loadable("images/developer.png"):
+                add "images/developer.png" xalign 0.5 ysize 350 fit "contain"
+            elif renpy.loadable("images/developer.jpg"):
+                add "images/developer.jpg" xalign 0.5 ysize 350 fit "contain"
+            else:
+                # Placeholder jika file foto tidak ada
+                frame:
+                    xsize 250
+                    ysize 330
+                    background Solid("#222222")
+                    xalign 0.5
+                    vbox:
+                        align (0.5, 0.5)
+                        spacing 10
+                        text _("Foto Developer") xalign 0.5 size 22 color "#888888"
+                        text _("(developer.png)") xalign 0.5 size 16 color "#666666"
 
-            ## gui.about biasanya di set di options.rpy.
-            if gui.about:
-                text "[gui.about!t]\n"
+            # Nama Developer
+            text _("ASEP SULAEMAN") style "about_dev_name"
 
-            text _("Dibuat Dengan {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].\n\n[renpy.license!t]")
+            # Penjelasan Singkat Game First Aid Hero
+            text _("Pengembang aplikasi First Aid Hero.\nAplikasi ini dibuat sebagai media pembelajaran interaktif mengenai pertolongan pertama (First Aid) .") style "about_dev_desc"
+
+            null height 20
+
+            # Versi & Info Ren'Py
+            text _("Dibuat menggunakan {a=https://www.renpy.org/}Ren'Py{/a} [renpy.version_only].") style "about_dev_footer"
+            text _("[renpy.license!t]") style "about_dev_license"
 
 
 style about_label is gui_label
@@ -590,6 +649,38 @@ style about_text is gui_text
 
 style about_label_text:
     size gui.label_text_size
+
+style about_dev_name is about_text:
+    xalign 0.5
+    text_align 0.5
+    size 38
+    bold True
+    font "fonts/lato-bold.ttf"
+    color "#4FC3F7" # Menggunakan warna accent biru sesuai gambar
+
+style about_dev_desc is about_text:
+    xalign 0.5
+    text_align 0.5
+    size 24
+    font "fonts/quicksand.ttf"
+    color "#ffffff"
+    line_spacing 6
+    xmaximum 800 # Membatasi lebar teks penjelasan agar rapi di tengah
+
+style about_dev_footer is about_text:
+    xalign 0.5
+    text_align 0.5
+    size 18
+    font "fonts/quicksand.ttf"
+    color "#aaaaaa"
+
+style about_dev_license is about_text:
+    xalign 0.5
+    text_align 0.5
+    size 14
+    font "fonts/quicksand.ttf"
+    color "#888888"
+    xmaximum 900
 
 
 ## Layar Load and Save #########################################################
@@ -750,7 +841,7 @@ screen preferences():
 
     tag menu
 
-    use game_menu(_("Setting"), scroll="viewport"):
+    use game_menu(_("Setting"), scroll="viewport", show_navigation=False):
 
         vbox:
 
@@ -1543,16 +1634,7 @@ screen quick_menu():
 
     zorder 100
 
-    if quick_menu:
-
-        hbox:
-            style "quick_menu"
-            style_prefix "quick"
-
-            textbutton _("Kembali") action Rollback()
-            textbutton _("Lompati") action Skip() alternate Skip(fast=True, confirm=True)
-            textbutton _("Otomatis") action Preference("auto-forward", "toggle")
-            textbutton _("Menu") action ShowMenu()
+    pass
 
 
 style window:
